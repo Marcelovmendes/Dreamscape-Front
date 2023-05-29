@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import FlightsPage from './pages/FlightsPage';
+import AccomodationPage from './pages/AccommodationPage';
 export default function App() {
   return (
     <>
@@ -11,6 +12,7 @@ export default function App() {
 <Routes>
 <Route  path="/" Component={HomePage}/>
 <Route path="/flights" Component={FlightsPage}/>
+<Route path= "/accomodations" Component={AccomodationPage} />
 </Routes>
 </BrowserRouter>
     </>

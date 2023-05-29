@@ -1,64 +1,114 @@
-import styled from "styled-components";
-import React from "react";
-import DreamscapeLogo from "../components/DreamscapeLogo";
+  import styled from "styled-components";
+  import React, { useState,useEffect } from "react";
+  import DreamscapeLogo from "../components/DreamscapeLogo";
+  import axios from "axios";
+ 
+  export default function HomePage() {
+    const [searchTerm,setSearchTerm] = useState("");
+    console.log(searchTerm);
+    const [cities,setCities] = useState([]);  
+    
+    useEffect(() => {
+      if (searchTerm) {
+        searchCities();
+      }
+    }, [searchTerm]);
+  
 
-export default function HomePage() {
-    return (
-        <div>
-            <DreamscapeLogo />
-            <HomeContainer>
-      <SearchContainer>
-      <GetCitiesBar>
-            <input type="text" placeholder="Busque por cidades ..."/>
-            <DropdownArrow>Search</DropdownArrow>
-        </GetCitiesBar>
-      </SearchContainer>
-      <ContainerBox>
-        <BoxTutorial>1. Escolha a cidade que deseja visitar.</BoxTutorial>
-        <BoxTutorial>2. Veja as passagens disponiveis com os preços e datas</BoxTutorial>
-        <BoxTutorial>3. Veja os locais onde você pode se hospedar e todo o conforto que eles oferecem!</BoxTutorial>
-      </ContainerBox>
-      </HomeContainer>
-        </div>
-    );
-}
-const HomeContainer = styled.div`
-background-color: red;
-display : flex;
-align-items: center;
-flex-direction: column;
-justify-content: center;
-width: 100%;
-height: 100vh;
-`
-const SearchContainer = styled.div`
-display: flex;
+  const searchCities = async()=>{
+  try{
+    const res = await axios.get(`https://dreamscape-api.onrender.com/search?searchTerm=${searchTerm}`);
 
-`
-const GetCitiesBar = styled.div`
-  display: flex;
-  align-items: center;  
-  background-color: #f2f2f2;
-  padding: 10px;
-
-  input{
-    border: none;
-    width: 500px;
+    setCities(res.data)
+  }catch (err){
+    console.log(err);
   }
-`;
+  }
 
-const DropdownArrow = styled.div`
-  font-size: 15px;
-  margin-left: 10px;
-  cursor: pointer;
-`
-const ContainerBox = styled.div`
-display: flex;
-flex-direction: row;
-`
-const BoxTutorial = styled.div`
-background-color: green;
-width: 300px;
-height: 300px;
-margin-left: 20px;
-`
+  const handleDropDownArrowClick = async ()=>{
+    
+    try{ const res = await axios.get(`https://dreamscape-api.onrender.com/`)
+    setCities(res.data)
+    }catch(err){
+
+    }
+  }
+      return (
+          <div>
+              <DreamscapeLogo />
+              <HomeContainer>
+        <SearchContainer>
+        <GetCitiesBar>
+              <input type="text" placeholder="Busque por cidades ..."
+              value={searchTerm}
+              onChange={(e)=>setSearchTerm(e.target.value)}
+              />
+              <DropdownArrow onClick={handleDropDownArrowClick}>Search</DropdownArrow>
+              { cities && cities.length>0 &&(
+              <CityList>
+                {cities.map((city)=>(
+                  <div key={city.id}>{city.name}</div>
+                ))}
+              </CityList>
+              )}
+          </GetCitiesBar>
+        </SearchContainer>
+        <ContainerBox>
+          <BoxTutorial>1. Escolha a cidade que deseja visitar.</BoxTutorial>
+          <BoxTutorial>2. Veja as passagens disponiveis com os preços e datas</BoxTutorial>
+          <BoxTutorial>3. Veja os locais onde você pode se hospedar e todo o conforto que eles oferecem!</BoxTutorial>
+        </ContainerBox>
+        </HomeContainer>
+          </div>
+      );
+  }
+  const HomeContainer = styled.div`
+  background-color: red;
+  display : flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  `
+  const SearchContainer = styled.div`
+  display: flex;
+
+  `
+  const GetCitiesBar = styled.div`
+    display: flex;
+    align-items: center;  
+    background-color: #f2f2f2;
+    padding: 10px;
+
+    input{
+      border: none;
+      width: 500px;
+    }
+  `;
+
+  const DropdownArrow = styled.div`
+    font-size: 15px;
+    margin-left: 10px;
+    cursor: pointer;
+  `
+  const ContainerBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  `
+  const BoxTutorial = styled.div`
+  background-color: green;
+  width: 300px;
+  height: 300px;
+  margin-left: 20px;
+  `
+  const CityList = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 1;
+  border: 1px solid gray;
+  padding: 10px;
+`;
