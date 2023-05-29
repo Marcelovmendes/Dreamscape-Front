@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components"
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
 const ResetStyle = createGlobalStyle`
     html, body, div, span, applet, object, iframe,

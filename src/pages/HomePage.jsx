@@ -3,7 +3,7 @@
   import DreamscapeLogo from "../components/DreamscapeLogo";
   import axios from "axios";
  
-  export default function HomePage() {
+  export default function HomePage({handleCitySelection}) {
     const [searchTerm,setSearchTerm] = useState("");
     console.log(searchTerm);
     const [cities,setCities] = useState([]);  
@@ -19,6 +19,7 @@
   try{
     const res = await axios.get(`https://dreamscape-api.onrender.com/search?searchTerm=${searchTerm}`);
 
+    handleCitySelection(res.data)
     setCities(res.data)
   }catch (err){
     console.log(err);
@@ -30,7 +31,7 @@
     try{ const res = await axios.get(`https://dreamscape-api.onrender.com/`)
     setCities(res.data)
     }catch(err){
-
+   console.log(err)
     }
   }
       return (
@@ -63,7 +64,7 @@
       );
   }
   const HomeContainer = styled.div`
-  background-color: red;
+  
   display : flex;
   align-items: center;
   flex-direction: column;
@@ -73,17 +74,18 @@
   `
   const SearchContainer = styled.div`
   display: flex;
-
   `
   const GetCitiesBar = styled.div`
     display: flex;
     align-items: center;  
     background-color: #f2f2f2;
     padding: 10px;
-
+    border-radius: 5px;
+    margin-bottom: 50px;
     input{
       border: none;
       width: 500px;
+      outline: none;
     }
   `;
 
@@ -97,10 +99,19 @@
   flex-direction: row;
   `
   const BoxTutorial = styled.div`
-  background-color: green;
+  background-color: #1A8CD8;
+  display: flex;
+  align-items: center;
   width: 300px;
   height: 300px;
+  color: white;
+  padding: 20px;
+  border-radius: 15%;
   margin-left: 20px;
+  font-weight:300 ;
+  font-size:20px ;
+  font-family: 'Roboto',sans-serif;
+
   `
   const CityList = styled.div`
   position: absolute;

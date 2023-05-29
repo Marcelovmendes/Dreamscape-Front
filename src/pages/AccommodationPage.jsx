@@ -1,9 +1,31 @@
-import React from 'react';
-import styled from 'styled-components';
-import DreamscapeLogo from '../components/DreamscapeLogo';
-import Slider from 'rc-slider';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import DreamscapeLogo from "../components/DreamscapeLogo";
+import Slider from "rc-slider";
 
 export default function AccommodationPage() {
+  const [accommodations, setAccommodations] = useState([]);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(1000000);
+
+  useEffect(() => {
+    getAccommodationByPrice();
+  }, []);
+  const getAccommodationByPrice = async () => {
+    try {
+      const res = await axios.get(
+        "https://dreamscape-api.onrender.com/accommodations",
+        {
+          params: {
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+          },
+        }
+      );
+      setAccommodations(res.data);
+    } catch (err) {}
+  };
+
   return (
     <>
       <DreamscapeLogo />
@@ -17,12 +39,6 @@ export default function AccommodationPage() {
         <CenterContainer>
           <CenterText>Hospedagens em CIDADE</CenterText>
           <AccommodationsContainer>
-            <Accommodation></Accommodation>
-            <Accommodation></Accommodation>
-            <Accommodation></Accommodation>
-            <Accommodation></Accommodation>
-            <Accommodation></Accommodation>
-            <Accommodation></Accommodation>
             <Accommodation></Accommodation>
           </AccommodationsContainer>
         </CenterContainer>
